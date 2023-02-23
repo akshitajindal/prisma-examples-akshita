@@ -14,12 +14,18 @@ RUN npx prisma migrate dev --name init
 # RUN npx prisma studio 
 RUN yarn build
 
-# COPY .next/standalone ./standalone
-# COPY ./prisma ./standalone/prisma
-# COPY .next/static ./standalone/.next/static
 
-# WORKDIR /standalone
+######################## Multistage Build ###############################
+FROM alpine 
 
-EXPOSE 3000 5555
-# CMD node server.js
-CMD yarn start
+RUN apk add --update nodejs npm
+
+COPY --from=BUILD_IMAGE ./graphql-nextjs/.next/standalone ./standalone
+COPY --from=BUILD_IMAGE ./graphql-nextjs/prisma ./standalone/prisma
+COPY --from=BUILD_IMAGE ./graphql-nextjs/.next/static ./standalone/.next/static
+
+WORKDIR /standalone
+
+EXPOSE 3000
+CMD node server.js
+# CMD yarn start
