@@ -13,6 +13,7 @@ RUN yarn install
 RUN npx prisma migrate dev --name init
 # RUN npx prisma studio 
 RUN yarn build
+RUN node esbuildConfig.js
 
 
 ######################## Multistage Build ###############################
@@ -27,5 +28,5 @@ COPY --from=BUILD_IMAGE ./graphql-nextjs/.next/static ./standalone/.next/static
 WORKDIR /standalone
 
 EXPOSE 3000
-CMD node server.js
+CMD node custom-server.js
 # CMD yarn start
