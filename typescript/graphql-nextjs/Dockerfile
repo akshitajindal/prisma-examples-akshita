@@ -10,7 +10,7 @@ WORKDIR /graphql-nextjs
 
 RUN yarn install
 RUN npx prisma migrate dev --name init
-RUN yarn build-with-logs
+RUN yarn build
 
 EXPOSE 3000 5555
 CMD yarn start
